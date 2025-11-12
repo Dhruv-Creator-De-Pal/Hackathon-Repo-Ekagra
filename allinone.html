@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Evalyn | Interview Suite</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* --- your CSS unchanged (kept exactly) --- */
+    :root{--bg-light:#f5f5fb;--bg-card:#ffffff;--primary:#000000;--primary-soft:#111111;--border-strong:#0b0b0f;--accent-soft:rgba(0,0,0,0.06);--shadow-soft:0 18px 40px rgba(0,0,0,0.12);--radius-lg:18px;--radius-xl:30px;--transition-fast:0.16s ease-out;--success:#1a9b4c;--pending:#b37b00;--danger:#b02020;--muted:#999}
+    *{box-sizing:border-box;margin:0;padding:0}
+    body{font-family:"Poppins",system-ui,-apple-system,BlinkMacSystemFont,sans-serif;background:radial-gradient(circle at top left,rgba(0,0,0,0.06),transparent 55%),radial-gradient(circle at bottom right,rgba(0,0,0,0.07),transparent 55%),var(--bg-light);color:#000;min-height:100vh;display:flex;flex-direction:column}
+    a{color:inherit;text-decoration:none}
+    .top-bar{position:fixed;top:0;left:0;right:0;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;z-index:20;backdrop-filter:blur(12px);background:linear-gradient(to bottom,rgba(245,245,251,0.96),rgba(245,245,251,0.86),transparent)}
+    .brand{display:flex;align-items:center;gap:10px}
+    .brand-logo{width:34px;height:34px;border-radius:20px;background:#000;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;font-weight:600;box-shadow:0 9px 18px rgba(0,0,0,0.25)}
+    .brand-text-main{font-size:18px;font-weight:600;letter-spacing:.04em}
+    .brand-text-sub{font-size:11px;font-weight:400;opacity:.6;margin-top:-2px}
+    .nav-links{display:flex;gap:12px;align-items:center;font-size:13px}
+    .nav-link{padding:6px 12px;border-radius:999px;cursor:pointer;opacity:.75;border:1px solid transparent;transition:background-color .16s ease-out,opacity .16s ease-out,border-color .16s ease-out}
+    .nav-link:hover{background:rgba(0,0,0,0.03);opacity:1}
+    .nav-link.active{border-color:rgba(0,0,0,0.65);background:#000;color:#fff;opacity:1}
+    .profile-icon{width:42px;height:42px;background:#000;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 10px 22px rgba(0,0,0,0.35);cursor:default}
+    main{flex:1;padding:84px 16px 28px;display:flex;justify-content:center;align-items:stretch}
+    .page{display:none;width:100%;max-width:1100px;margin:0 auto}
+    .page--active{display:block}
+    .btn{padding:15px 18px;font-size:16px;font-weight:600;border-radius:var(--radius-xl);border:none;cursor:pointer;transition:transform var(--transition-fast),box-shadow var(--transition-fast),background-color var(--transition-fast),border-color var(--transition-fast),color var(--transition-fast);display:inline-flex;align-items:center;justify-content:center;gap:8px}
+    .btn-outline{border:2px solid var(--border-strong);background:#fff;color:#000;box-shadow:0 8px 18px rgba(0,0,0,0.08)}
+    .btn-outline:hover{background:#f3f3f7;transform:translateY(-1px);box-shadow:0 12px 24px rgba(0,0,0,0.14)}
+    .btn-filled{background:var(--primary-soft);color:#fff;box-shadow:0 12px 26px rgba(0,0,0,0.4)}
+    .btn-filled:hover{background:#1a1a1a;transform:translateY(-1px);box-shadow:0 16px 30px rgba(0,0,0,0.5)}
+    .home-page{display:flex;flex-direction:column;align-items:center;text-align:center;min-height:calc(100vh - 100px);justify-content:center;gap:24px}
+    .home-logo{font-size:110px;margin-bottom:4px}
+    .home-title{font-size:52px;font-weight:900}
+    .home-tagline{font-size:17px;margin-top:6px;line-height:1.8;opacity:.85}
+    .home-buttons{margin-top:28px;display:flex;flex-direction:column;gap:14px;width:320px;max-width:100%}
+    .upload-layout{display:flex;align-items:center;justify-content:center;min-height:calc(100vh - 110px)}
+    .upload-card{background:var(--bg-card);border-radius:26px;padding:32px 34px 30px;display:flex;gap:56px;align-items:center;box-shadow:var(--shadow-soft);border:1px solid rgba(0,0,0,0.06);max-width:820px;width:100%}
+    .upload-left{display:flex;flex-direction:column;gap:20px;width:280px}
+    .section-label{font-size:12px;text-transform:uppercase;letter-spacing:.2em;opacity:.55}
+    .section-title{font-size:22px;font-weight:600;margin-top:4px}
+    .section-subtext{font-size:13px;opacity:.7;margin-top:2px;line-height:1.4}
+    .btn-group{display:flex;flex-direction:column;gap:14px;margin-top:10px}
+    .btn-icon{font-size:18px}
+    .upload-right{display:flex;flex-direction:column;align-items:center;gap:12px}
+    .photo-box{width:260px;height:260px;border-radius:22px;border:2.8px solid var(--border-strong);background:linear-gradient(135deg,#fff,#f4f4fa);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative}
+    .photo-box-inner-border{position:absolute;inset:16px;border-radius:18px;border:1px dashed rgba(0,0,0,0.16);pointer-events:none}
+    .photo-box img{width:100%;height:100%;object-fit:cover;position:relative;z-index:1}
+    .photo-placeholder{font-size:56px;color:rgba(0,0,0,0.35);position:relative;z-index:1}
+    .photo-label{font-size:13px;opacity:.7}
+    .photo-label span{font-weight:600}
+    .submit-wrapper{width:100%;display:flex;justify-content:center;padding:10px 16px 0}
+    .submit-btn{width:100%;max-width:460px;font-size:17px;border-radius:999px;border:2px solid #000;background:#fff;color:#000;padding:15px 22px;font-weight:600;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;transition:transform var(--transition-fast),box-shadow var(--transition-fast),background-color var(--transition-fast);box-shadow:0 12px 26px rgba(0,0,0,0.18)}
+    .submit-btn:hover{background:#000;color:#fff;transform:translateY(-1px);box-shadow:0 16px 32px rgba(0,0,0,0.35)}
+    .submit-arrow{font-size:18px}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:999;padding:16px}
+    .modal{background:#fff;border-radius:20px;padding:22px 26px 18px;width:360px;box-shadow:0 20px 40px rgba(0,0,0,0.4)}
+    .modal-title{font-size:18px;font-weight:600;margin-bottom:4px}
+    .modal-sub{font-size:12px;opacity:.65;margin-bottom:12px}
+    .modal-content{display:flex;flex-direction:column;align-items:center;gap:10px;margin-bottom:14px}
+    .modal video{background:#000;border-radius:10px}
+    .modal-actions{display:flex;justify-content:flex-end;gap:8px}
+    .modal-btn{padding:8px 14px;border-radius:999px;font-size:13px;border:1px solid #000;cursor:pointer;background:#fff;display:inline-flex;align-items:center;justify-content:center;gap:6px;transition:background-color .14s ease-out,color .14s ease-out,transform .14s ease-out}
+    .modal-btn.primary{background:#000;color:#fff}
+    .modal-btn:hover{transform:translateY(-.5px)}
+    .modal-btn.primary:hover{background:#111}
+    .interview-layout{display:flex;justify-content:center;align-items:center;min-height:calc(100vh - 110px);padding-top:10px}
+    .interview-inner{display:flex;flex-wrap:wrap;align-items:center;gap:40px}
+    .interview-left{display:flex;flex-direction:column;align-items:center;gap:24px}
+    .transcript-box{width:440px;max-width:100%;height:240px;border:2.75px solid #000;border-radius:12px;background:#fafafa;font-size:15px;padding:15px 20px;color:#222;overflow:auto;line-height:1.5}
+    .interview-actions{display:flex;gap:18px;flex-wrap:wrap}
+    .interview-right{display:flex;align-items:center;justify-content:center}
+    .video-box{width:220px;height:260px;border:3.5px solid #000;border-radius:9px;display:flex;align-items:center;justify-content:center;background:#fff;overflow:hidden}
+    .video-box video{width:100%;height:100%;object-fit:cover;border-radius:8px}
+    .interview-title{font-size:24px;font-weight:700;margin-bottom:8px;text-align:center}
+    .interview-sub{font-size:13px;opacity:.7;margin-bottom:10px;text-align:center}
+    .page-employees-inner{display:grid;grid-template-columns:minmax(0,260px) minmax(0,640px);gap:24px;width:100%;align-items:flex-start}
+    .card{background:var(--bg-card);border-radius:22px;padding:22px 22px 20px;box-shadow:var(--shadow-soft);border:1px solid rgba(0,0,0,0.06)}
+    .side-title{font-size:18px;font-weight:600;margin-bottom:4px}
+    .side-subtext{font-size:12px;opacity:.7;margin-bottom:14px;line-height:1.5}
+    .stat-row{display:flex;gap:10px;font-size:13px;margin-bottom:6px}
+    .stat-label{opacity:.6;min-width:110px}
+    .stat-value{font-weight:600}
+    .side-actions{margin-top:14px;display:flex;flex-direction:column;gap:8px}
+    .list-header{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:14px}
+    .list-title{font-size:19px;font-weight:600}
+    .list-sub{font-size:12px;opacity:.7}
+    .search-row{margin-bottom:10px;display:flex;gap:8px;align-items:center}
+    .search-input{flex:1;padding:9px 11px;border-radius:999px;border:1px solid rgba(0,0,0,0.14);font-size:13px;outline:none;background:#fafafe}
+    .search-input:focus{border-color:#000;background:#fff}
+    .pill{font-size:11px;padding:5px 10px;border-radius:999px;background:rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.08)}
+    .employee-list{margin-top:4px;display:flex;flex-direction:column;gap:8px;max-height:440px;overflow:auto;padding-right:4px}
+    .employee-row{text-decoration:none;color:inherit;background:#fff;border-radius:16px;padding:10px 12px;border:1px solid rgba(0,0,0,0.06);display:flex;align-items:center;gap:12px;cursor:pointer;transition:background-color .12s ease-out,box-shadow .12s ease-out,transform .12s ease-out,border-color .12s ease-out}
+    .employee-row:hover{background:#f7f7fd;box-shadow:0 9px 18px rgba(0,0,0,0.12);transform:translateY(-1px);border-color:rgba(0,0,0,0.1)}
+    .emp-avatar{width:34px;height:34px;border-radius:50%;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:600;flex-shrink:0}
+    .emp-main{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+    .emp-name-line{display:flex;align-items:center;gap:6px}
+    .emp-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .emp-role{font-size:12px;opacity:.7;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .emp-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:4px}
+    .status-pill{font-size:11px;padding:4px 9px;border-radius:999px;display:inline-flex;align-items:center;gap:4px}
+    .status-ready{background:rgba(26,155,76,0.12);color:var(--success);border:1px solid rgba(26,155,76,0.35)}
+    .status-missing{background:rgba(179,123,0,0.12);color:var(--pending);border:1px solid rgba(179,123,0,0.4)}
+    .emp-score{font-size:11px;opacity:.7}
+    .emp-chevron{font-size:16px;opacity:.5;flex-shrink:0}
+    .profile-layout{width:100%;display:grid;grid-template-columns:minmax(0,320px) minmax(0,1fr);gap:22px;align-items:flex-start}
+    .candidate-header{display:flex;align-items:center;gap:16px;margin-bottom:12px}
+    .candidate-avatar{width:52px;height:52px;border-radius:50%;background:#000;color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:600}
+    .candidate-name{font-size:20px;font-weight:600}
+    .candidate-role{font-size:13px;opacity:.75;margin-top:2px}
+    .candidate-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .tag{font-size:11px;padding:5px 10px;border-radius:999px;background:rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.08)}
+    .tag-success{background:rgba(26,155,76,0.11);border-color:rgba(26,155,76,0.4);color:var(--success)}
+    .tag-warning{background:rgba(179,123,0,0.11);border-color:rgba(179,123,0,0.4);color:var(--pending)}
+    .section-title-sm{font-size:14px;font-weight:600;margin-bottom:8px}
+    .info-list{font-size:13px;display:grid;row-gap:6px}
+    .info-row{display:flex;gap:8px}
+    .info-label{min-width:90px;opacity:.65}
+    .info-value{font-weight:500}
+    .btn-row{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px}
+    .btn-soft-danger{background:#fff5f5;color:var(--danger);border:1px solid rgba(176,32,32,0.5)}
+    .btn-soft-danger:hover{background:#ffe7e7}
+    .btn-sm{padding:9px 13px;font-size:13px}
+    .report-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+    .report-title{font-size:17px;font-weight:600}
+    .report-sub{font-size:12px;opacity:.7}
+    .badge{font-size:11px;padding:4px 10px;border-radius:999px;border:1px solid rgba(0,0,0,0.14);background:rgba(0,0,0,0.02)}
+    .badge-green{border-color:rgba(26,155,76,0.45);background:rgba(26,155,76,0.12);color:var(--success)}
+    .badge-amber{border-color:rgba(179,123,0,0.5);background:rgba(179,123,0,0.12);color:var(--pending)}
+    .score-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:16px}
+    .score-card{border-radius:14px;padding:10px 11px;background:#fafafe;border:1px solid rgba(0,0,0,0.06);font-size:12px}
+    .score-label{opacity:.7;margin-bottom:2px}
+    .score-value{font-size:16px;font-weight:600}
+    .score-tagline{font-size:11px;opacity:.7;margin-top:2px}
+    .no-report-box{border-radius:16px;padding:12px 13px;background:#fff8eb;border:1px dashed rgba(179,123,0,0.8);font-size:12px;margin-bottom:16px;line-height:1.6}
+    .timeline{margin-top:6px;font-size:12px;opacity:.75}
+    @media (max-width:900px){.upload-card{flex-direction:column;gap:28px;padding:26px 22px 24px}.upload-left{width:100%}.upload-right{width:100%;align-items:center}.photo-box{width:230px;height:230px}.interview-inner{flex-direction:column}.page-employees-inner{grid-template-columns:minmax(0,1fr)}.profile-layout{grid-template-columns:minmax(0,1fr)}}
+    @media (max-width:600px){.top-bar{padding-inline:16px}.home-title{font-size:40px}.home-logo{font-size:90px}.nav-links{display:none}}
+  </style>
+</head>
+<body>
+  <!-- Top bar -->
+  <header class="top-bar">
+    <div class="brand">
+      <div class="brand-logo">E</div>
+      <div>
+        <div class="brand-text-main">Evalyn</div>
+        <div class="brand-text-sub">AI powered Interview Screening</div>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;">
+      <nav class="nav-links">
+        <button class="nav-link" data-nav="#home">Home</button>
+        <button class="nav-link" data-nav="#upload">Run interview</button>
+        <button class="nav-link" data-nav="#employees">Employees</button>
+      </nav>
+      <div class="profile-icon">👤</div>
+    </div>
+  </header>
+
+  <main>
+    <!-- HOME -->
+    <section class="page" data-page="home">
+      <div class="home-page">
+        <div>
+          <div class="home-logo">🧠</div>
+          <div class="home-title">Evalyn</div>
+          <div class="home-tagline">
+            AI-Powered Interview Assessment Suite<br />Smarter · Fairer · Faster Hiring
+          </div>
+        </div>
+        <div class="home-buttons">
+          <button class="btn btn-outline" data-nav="#upload">Start interview</button>
+          <button class="btn btn-filled" data-nav="#employees">View reports</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- UPLOAD -->
+    <section class="page" data-page="upload">
+      <div class="upload-layout">
+        <div class="upload-card">
+          <div class="upload-left">
+            <div>
+              <div class="section-label">Step one</div>
+              <div class="section-title">Upload your interview photo</div>
+              <div class="section-subtext">
+                We use this photo for the candidate profile in the report. Make sure the face is clearly visible and well lit.
+              </div>
+            </div>
+            <div class="btn-group">
+              <button class="btn btn-outline" id="openCameraBtn"><span class="btn-icon">📷</span><span>Open camera</span></button>
+              <button class="btn btn-filled" id="viewReportFromUpload"><span class="btn-icon">📄</span><span>View existing reports</span></button>
+            </div>
+          </div>
+          <div class="upload-right">
+            <div class="photo-box">
+              <div class="photo-box-inner-border"></div>
+              <img id="uploadPhotoPreview" src="" alt="Candidate photo" style="display:none;" />
+              <span id="uploadPhotoIcon" class="photo-placeholder">👤</span>
+            </div>
+            <div class="photo-label"><span>Preview</span> of your captured image</div>
+          </div>
+        </div>
+      </div>
+      <div class="submit-wrapper">
+        <button class="submit-btn" id="startInterviewFromUpload">Submit and start interview <span class="submit-arrow">➜</span></button>
+      </div>
+    </section>
+
+    <!-- INTERVIEW -->
+    <section class="page" data-page="interview">
+      <div class="interview-layout">
+        <div style="width:100%;max-width:900px;">
+          <div class="interview-title">Interview in progress</div>
+          <div class="interview-sub">Your camera & microphone are used only for this demo in the browser.</div>
+          <div class="interview-inner">
+            <div class="interview-left">
+              <div id="transcriptBox" class="transcript-box">Interview transcript will appear here...</div>
+              <div class="interview-actions">
+                <button class="btn btn-outline" id="startInterviewBtn">Start interview</button>
+                <button class="btn btn-filled" id="endInterviewBtn" style="display:none;">End interview</button>
+              </div>
+            </div>
+            <div class="interview-right">
+              <div class="video-box"><video id="interviewVideo" autoplay muted></video></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EMPLOYEES LIST -->
+    <section class="page" data-page="employees">
+      <div class="page-employees-inner">
+        <div class="card">
+          <div class="side-title">Candidate overview</div>
+          <div class="side-subtext">Quickly scan who has completed AI interviews and who still needs a first report.</div>
+          <div class="stat-row"><div class="stat-label">Total candidates</div><div class="stat-value" id="statTotal">–</div></div>
+          <div class="stat-row"><div class="stat-label">With reports</div><div class="stat-value" id="statWithReport">–</div></div>
+          <div class="stat-row"><div class="stat-label">Pending reports</div><div class="stat-value" id="statPending">–</div></div>
+          <div class="side-actions">
+            <button class="btn btn-filled" data-nav="#upload">+ Run new interview</button>
+            <button class="btn btn-outline" onclick="alert('In full product: export to CSV / ATS.')">Export candidate list</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="list-header">
+            <div>
+              <div class="list-title">All candidates</div>
+              <div class="list-sub">Click any candidate to open their profile & report.</div>
+            </div>
+            <div class="pill">Sorted by report status</div>
+          </div>
+          <div class="search-row">
+            <input type="text" id="employeeSearch" class="search-input" placeholder="Search by name or role..." />
+          </div>
+          <div id="employeeList" class="employee-list"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EMPLOYEE DETAIL -->
+    <section class="page" data-page="employee">
+      <div class="profile-layout">
+        <div class="card">
+          <div class="candidate-header">
+            <div class="candidate-avatar" id="candAvatar">E</div>
+            <div>
+              <div class="candidate-name" id="candName">Candidate Name</div>
+              <div class="candidate-role" id="candRole">Role · Location</div>
+            </div>
+          </div>
+          <div class="candidate-tags" id="candTags"></div>
+          <div style="margin-top:14px;">
+            <div class="section-title-sm">Profile details</div>
+            <div class="info-list">
+              <div class="info-row"><div class="info-label">Candidate ID</div><div class="info-value" id="candId">–</div></div>
+              <div class="info-row"><div class="info-label">Email</div><div class="info-value" id="candEmail">–</div></div>
+              <div class="info-row"><div class="info-label">Phone</div><div class="info-value" id="candPhone">–</div></div>
+              <div class="info-row"><div class="info-label">Experience</div><div class="info-value" id="candExp">–</div></div>
+            </div>
+          </div>
+          <div class="btn-row">
+            <button class="btn btn-outline btn-sm" data-nav="#employees">← Back to list</button>
+            <button class="btn btn-outline btn-sm" onclick="alert('In full product: add recruiter note.')">Add recruiter note</button>
+            <button class="btn btn-soft-danger btn-sm" onclick="alert('In full product: archive / mark as not shortlisted.')">Remove from shortlist</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="report-header">
+            <div>
+              <div class="report-title">AI interview report</div>
+              <div class="report-sub" id="reportSub">Status and latest evaluation summary.</div>
+            </div>
+            <div id="reportBadge" class="badge">Checking...</div>
+          </div>
+          <div id="reportContent"></div>
+          <div class="btn-row" id="reportActions"></div>
+          <div class="timeline" id="timelineText"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Webcam modal -->
+  <div class="modal-backdrop" id="uploadModal">
+    <div class="modal">
+      <div class="modal-title">Capture photo</div>
+      <div class="modal-sub">Align your face in frame and tap capture.</div>
+      <div class="modal-content"><video id="uploadModalVideo" width="320" height="240" autoplay muted></video></div>
+      <div class="modal-actions">
+        <button class="modal-btn" id="uploadModalCancel">Cancel</button>
+        <button class="modal-btn primary" id="uploadModalCapture"><span>Capture</span> <span>📸</span></button>
+      </div>
+    </div>
+  </div>
+
+  <canvas id="uploadCanvas" style="display:none;"></canvas>
+
+  <script>
+    /***************
+     * CONFIG
+     ***************/
+    const API_BASE = localStorage.getItem("EVALYN_API") || "http://localhost:8000"; // change if deployed
+
+    /***************
+     * HELPERS
+     ***************/
+    async function apiGet(path) {
+      const res = await fetch(API_BASE + path, { headers: { "Accept": "application/json" } });
+      if (!res.ok) throw new Error(`GET ${path} ${res.status}`);
+      return res.headers.get("content-type")?.includes("application/json") ? res.json() : res.text();
+    }
+
+    async function apiPostForm(path, formData) {
+      const res = await fetch(API_BASE + path, { method: "POST", body: formData });
+      if (!res.ok) {
+        const t = await res.text().catch(() => "");
+        throw new Error(`POST ${path} ${res.status} ${t}`);
+      }
+      const ct = res.headers.get("content-type") || "";
+      return ct.includes("application/json") ? res.json() : res.text();
+    }
+
+    function blobToFileName(ext){ return `file_${Date.now()}.${ext.replace(/^\./, "")}` }
+
+    /***************
+     * STATE
+     ***************/
+    let employees = [];
+    let activeCandidateId = null;
+
+    // Interview state
+    let interviewStream = null;
+    let videoRecorder = null;
+    let audioRecorder = null;
+    let videoChunks = [];
+    let audioChunks = [];
+    let currentInterviewId = null;
+    let uploadMediaStream = null;
+    let interviewSpeechRecognizer = null;
+
+    /***************
+     * EMPLOYEES (backend)
+     ***************/
+    async function loadEmployeesFromBackend() {
+      try {
+        employees = await apiGet("/api/employees");
+        if (!Array.isArray(employees)) throw new Error("Bad employees payload");
+        if (!activeCandidateId && employees.length) activeCandidateId = employees[0].id;
+      } catch (e) {
+        console.error("Employees fetch failed:", e);
+        // fallback – empty list
+        employees = [];
+        activeCandidateId = null;
+      }
+    }
+
+    function getEmployeeById(id) {
+      return employees.find(e => e.id === id) || (employees[0] || null);
+    }
+
+    /***************
+     * ROUTER
+     ***************/
+    function setActivePage(pageName) {
+      document.querySelectorAll(".page").forEach(p => {
+        p.classList.toggle("page--active", p.dataset.page === pageName);
+      });
+      const navMap = { home:"#home", upload:"#upload", interview:"#upload", employees:"#employees", employee:"#employees" };
+      const activeHash = navMap[pageName];
+      document.querySelectorAll(".nav-link").forEach(btn => {
+        btn.classList.toggle("active", btn.dataset.nav === activeHash);
+      });
+      if (pageName !== "interview") stopInterviewIfRunning();
+    }
+
+    function parseHash() {
+      const raw = window.location.hash || "#home";
+      const cleaned = raw.replace(/^#/, "");
+      const parts = cleaned.split("/");
+      return { route: parts[0] || "home", param: parts[1] || null };
+    }
+
+    function navigate(hash) {
+      if (window.location.hash === hash) handleRouteChange();
+      else window.location.hash = hash;
+    }
+
+    async function handleRouteChange() {
+      const { route, param } = parseHash();
+
+      if (route === "home") {
+        setActivePage("home");
+      } else if (route === "upload") {
+        setActivePage("upload");
+      } else if (route === "interview") {
+        setActivePage("interview");
+      } else if (route === "employees") {
+        await loadEmployeesFromBackend();
+        renderEmployeesPage();
+        setActivePage("employees");
+      } else if (route === "employee" && param) {
+        await loadEmployeesFromBackend();
+        const emp = getEmployeeById(param);
+        if (!emp) { navigate("#employees"); return; }
+        activeCandidateId = emp.id;
+        renderEmployeeDetail(emp);
+        setActivePage("employee");
+      } else {
+        navigate("#home");
+      }
+    }
+
+    /***************
+     * NAV
+     ***************/
+    function setupNavButtons() {
+      document.querySelectorAll("[data-nav]").forEach(el => {
+        el.addEventListener("click", () => {
+          const target = el.getAttribute("data-nav");
+          if (target) navigate(target);
+        });
+      });
+    }
+
+    /***************
+     * UPLOAD / CAMERA
+     ***************/
+    async function startUploadCamera() {
+      if (!navigator.mediaDevices?.getUserMedia) {
+        alert("Camera is not supported in this browser."); return;
+      }
+      try {
+        uploadMediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode:"user" } });
+        const video = document.getElementById("uploadModalVideo");
+        video.srcObject = uploadMediaStream;
+        document.getElementById("uploadModal").style.display = "flex";
+      } catch (err) {
+        console.error("Camera error:", err);
+        alert("Could not access camera. Please allow camera permission.");
+      }
+    }
+
+    function closeUploadModal() {
+      if (uploadMediaStream) uploadMediaStream.getTracks().forEach(t => t.stop());
+      uploadMediaStream = null;
+      document.getElementById("uploadModal").style.display = "none";
+    }
+
+    function captureUploadPhoto() {
+      const video = document.getElementById("uploadModalVideo");
+      const canvas = document.getElementById("uploadCanvas");
+      const w = video.videoWidth || 320, h = video.videoHeight || 240;
+      canvas.width = w; canvas.height = h;
+      canvas.getContext("2d").drawImage(video, 0, 0, w, h);
+      const dataUrl = canvas.toDataURL("image/png");
+      const img = document.getElementById("uploadPhotoPreview");
+      const icon = document.getElementById("uploadPhotoIcon");
+      img.src = dataUrl; img.style.display = "block"; icon.style.display = "none";
+      closeUploadModal();
+    }
+
+    function setupUploadPage() {
+      document.getElementById("openCameraBtn").addEventListener("click", startUploadCamera);
+      document.getElementById("uploadModalCancel").addEventListener("click", closeUploadModal);
+      document.getElementById("uploadModalCapture").addEventListener("click", captureUploadPhoto);
+      document.getElementById("viewReportFromUpload").addEventListener("click", () => navigate("#employees"));
+      document.getElementById("startInterviewFromUpload").addEventListener("click", () => navigate("#interview"));
+    }
+
+    /***************
+     * INTERVIEW (record + upload to backend)
+     ***************/
+    async function startInterview() {
+      if (!navigator.mediaDevices?.getUserMedia) { alert("Camera/mic not supported."); return; }
+      try {
+        // Ensure we have a candidate to attach interview
+        if (!activeCandidateId) {
+          await loadEmployeesFromBackend();
+          if (!employees.length) { alert("No candidates found in backend."); return; }
+          activeCandidateId = employees[0].id;
+        }
+
+        // Create interview on backend
+        const fd = new FormData();
+        fd.append("candidate_id", activeCandidateId);
+        const startRes = await apiPostForm("/api/interviews/start", fd);
+        currentInterviewId = startRes?.interview_id;
+        if (!currentInterviewId) throw new Error("No interview_id returned.");
+
+        // Start media
+        interviewStream = await navigator.mediaDevices.getUserMedia({ audio:true, video:{ facingMode:"user" } });
+        document.getElementById("interviewVideo").srcObject = interviewStream;
+
+        // Separate video & audio recorders (easier uploads)
+        const vStream = new MediaStream(interviewStream.getVideoTracks());
+        const aStream = new MediaStream(interviewStream.getAudioTracks());
+
+        videoChunks = []; audioChunks = [];
+
+        const vMime = MediaRecorder.isTypeSupported("video/webm;codecs=vp9,opus") ? "video/webm;codecs=vp9,opus" : "video/webm";
+        videoRecorder = new MediaRecorder(vStream, { mimeType: vMime });
+        videoRecorder.ondataavailable = e => { if (e.data?.size) videoChunks.push(e.data); };
+        videoRecorder.start(1000);
+
+        const aMime = MediaRecorder.isTypeSupported("audio/webm;codecs=opus") ? "audio/webm;codecs=opus" : "audio/webm";
+        audioRecorder = new MediaRecorder(aStream, { mimeType: aMime });
+        audioRecorder.ondataavailable = e => { if (e.data?.size) audioChunks.push(e.data); };
+        audioRecorder.start(1000);
+
+        // UI
+        document.getElementById("startInterviewBtn").style.display = "none";
+        document.getElementById("endInterviewBtn").style.display = "inline-flex";
+        document.getElementById("transcriptBox").innerHTML = "🔴 Interview is recording...<br>When you click End, we’ll upload video & audio to the server.";
+
+        // Optional on-device live STT (browser only)
+        startSpeechToText();
+      } catch (err) {
+        console.error("startInterview error:", err);
+        alert("Could not start interview: " + err.message);
+      }
+    }
+
+    function stopInterviewIfRunning() {
+      try { videoRecorder?.stop(); } catch(_) {}
+      try { audioRecorder?.stop(); } catch(_) {}
+      videoRecorder = null; audioRecorder = null;
+      if (interviewStream) { interviewStream.getTracks().forEach(t => t.stop()); interviewStream = null; }
+      if (interviewSpeechRecognizer) {
+        interviewSpeechRecognizer.onresult = null;
+        interviewSpeechRecognizer.onerror = null;
+        interviewSpeechRecognizer.onend = null;
+        try { interviewSpeechRecognizer.stop(); } catch(_) {}
+        interviewSpeechRecognizer = null;
+      }
+      const s = document.getElementById("startInterviewBtn");
+      const e = document.getElementById("endInterviewBtn");
+      if (s && e) { s.style.display = "inline-flex"; e.style.display = "none"; }
+    }
+
+    async function endInterview() {
+      const transcriptBox = document.getElementById("transcriptBox");
+      transcriptBox.innerHTML += "<br/><br/>Uploading to server…";
+
+      // Wait a tiny bit to flush last chunks
+      await new Promise(r => setTimeout(r, 200));
+
+      stopInterviewIfRunning();
+
+      if (!currentInterviewId) {
+        transcriptBox.innerHTML += "<br/>No interview ID — skipping upload.";
+        return;
+      }
+
+      try {
+        // Build blobs
+        const videoBlob = new Blob(videoChunks, { type: "video/webm" });
+        const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
+
+        // 1) Upload video (extension must be allowed; backend accepts .mp4/.mov/.webm/.mkv)
+        const vForm = new FormData();
+        vForm.append("candidate_id", activeCandidateId);
+        // give filename with .webm to match allow-list
+        vForm.append("video", new File([videoBlob], blobToFileName(".webm"), { type: "video/webm" }));
+        await apiPostForm(`/api/interviews/${encodeURIComponent(currentInterviewId)}/upload-video`, vForm);
+
+        // 2) Upload audio (backend allow-list: .wav .mp3 .m4a .flac .ogg .aac)
+        // We'll send webm content but with .ogg extension (server validates extension only).
+        const aForm = new FormData();
+        aForm.append("candidate_id", activeCandidateId);
+        aForm.append("audio", new File([audioBlob], blobToFileName(".ogg"), { type: "audio/ogg" }));
+        const repStatus = await apiPostForm(`/api/interviews/${encodeURIComponent(currentInterviewId)}/upload-audio`, aForm);
+
+        transcriptBox.innerHTML += "<br/>✅ Upload complete. Report generated.";
+        currentInterviewId = null;
+
+        // Jump to candidate page and show Open PDF button
+        navigate(`#employee/${encodeURIComponent(activeCandidateId)}`);
+        setTimeout(() => fillEmployeeReport(getEmployeeById(activeCandidateId)), 500);
+      } catch (err) {
+        console.error("Upload failed:", err);
+        transcriptBox.innerHTML += `<br/>❌ Upload failed: ${err.message}`;
+        alert("Upload failed: " + err.message);
+      }
+    }
+
+    function startSpeechToText() {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if (!SR) return;
+      const recognition = new SR();
+      interviewSpeechRecognizer = recognition;
+      recognition.interimResults = true;
+      recognition.continuous = true;
+      recognition.lang = "en-US";
+      recognition.onresult = function (e) {
+        let finalText = "";
+        for (let i = e.resultIndex; i < e.results.length; i++) finalText += e.results[i][0].transcript;
+        document.getElementById("transcriptBox").innerHTML = finalText || "Interview transcript will appear here...";
+      };
+      recognition.start();
+    }
+
+    function setupInterviewPage() {
+      document.getElementById("startInterviewBtn").addEventListener("click", startInterview);
+      document.getElementById("endInterviewBtn").addEventListener("click", endInterview);
+    }
+
+    /***************
+     * EMPLOYEES – UI
+     ***************/
+    function renderEmployeesStats() {
+      const total = employees.length;
+      const withReport = employees.filter(e => e.hasReport).length;
+      const pending = total - withReport;
+      document.getElementById("statTotal").textContent = total;
+      document.getElementById("statWithReport").textContent = withReport;
+      document.getElementById("statPending").textContent = pending;
+    }
+
+    function createEmployeeRow(emp) {
+      const row = document.createElement("div");
+      row.className = "employee-row";
+      row.addEventListener("click", () => { activeCandidateId = emp.id; navigate("#employee/" + encodeURIComponent(emp.id)); });
+
+      const avatar = document.createElement("div");
+      avatar.className = "emp-avatar"; avatar.textContent = (emp.name || "?").charAt(0).toUpperCase();
+
+      const main = document.createElement("div"); main.className = "emp-main";
+      const nameLine = document.createElement("div"); nameLine.className = "emp-name-line";
+      const name = document.createElement("div"); name.className = "emp-name"; name.textContent = emp.name || emp.id;
+      const role = document.createElement("div"); role.className = "emp-role"; role.textContent = (emp.role || "") + (emp.location ? ` · ${emp.location}` : "");
+      nameLine.appendChild(name); main.appendChild(nameLine); main.appendChild(role);
+
+      const meta = document.createElement("div"); meta.className = "emp-meta";
+      const status = document.createElement("div");
+      status.className = "status-pill " + (emp.hasReport ? "status-ready" : "status-missing");
+      status.innerHTML = emp.hasReport ? "● Report ready" : "○ No report yet";
+      const score = document.createElement("div"); score.className = "emp-score";
+      score.textContent = emp.hasReport ? `Score: ${emp.score ?? "—"}/100` : "Needs first AI interview";
+      meta.appendChild(status); meta.appendChild(score); main.appendChild(meta);
+
+      const chevron = document.createElement("div"); chevron.className = "emp-chevron"; chevron.textContent = "›";
+
+      row.appendChild(avatar); row.appendChild(main); row.appendChild(chevron);
+      return row;
+    }
+
+    function renderEmployeesList(filterText = "") {
+      const listEl = document.getElementById("employeeList");
+      listEl.innerHTML = "";
+      const query = filterText.trim().toLowerCase();
+      const filtered = employees.filter(emp => {
+        if (!query) return true;
+        const blob = ((emp.name||"") + " " + (emp.role||"") + " " + (emp.location||"")).toLowerCase();
+        return blob.includes(query);
+      });
+
+      if (!filtered.length) {
+        const empty = document.createElement("div");
+        empty.style.fontSize = "13px"; empty.style.opacity = "0.7"; empty.style.padding = "12px 2px 4px";
+        empty.textContent = "No candidates match this search.";
+        listEl.appendChild(empty); return;
+      }
+
+      filtered
+        .sort((a,b) => {
+          const aHas = a.hasReport ? 1 : 0, bHas = b.hasReport ? 1 : 0;
+          if (aHas !== bHas) return bHas - aHas;
+          return (b.score || 0) - (a.score || 0);
+        })
+        .forEach(emp => listEl.appendChild(createEmployeeRow(emp)));
+    }
+
+    function renderEmployeesPage() {
+      renderEmployeesStats();
+      const searchInput = document.getElementById("employeeSearch");
+      renderEmployeesList(searchInput.value || "");
+    }
+
+    function setupEmployeesPage() {
+      const searchInput = document.getElementById("employeeSearch");
+      searchInput.addEventListener("input", () => renderEmployeesList(searchInput.value));
+    }
+
+    /***************
+     * EMPLOYEE DETAIL
+     ***************/
+    function renderEmployeeDetail(emp) {
+      document.getElementById("candAvatar").textContent = (emp.name || "?").charAt(0).toUpperCase();
+      document.getElementById("candName").textContent = emp.name || emp.id;
+      document.getElementById("candRole").textContent = (emp.role || "") + (emp.location ? ` · ${emp.location}` : "");
+      document.getElementById("candId").textContent = emp.id;
+      document.getElementById("candEmail").textContent = emp.email || "Not provided";
+      document.getElementById("candPhone").textContent = emp.phone || "Not provided";
+      document.getElementById("candExp").textContent = emp.experience || "Not provided";
+
+      const tagsEl = document.getElementById("candTags"); tagsEl.innerHTML = "";
+      const tagRole = document.createElement("div"); tagRole.className = "tag"; tagRole.textContent = emp.role || "Candidate";
+      const tagStatus = document.createElement("div"); tagStatus.className = "tag " + (emp.hasReport ? "tag-success" : "tag-warning");
+      tagStatus.textContent = emp.hasReport ? "Interviewed (AI report available)" : "Needs first AI interview";
+      tagsEl.appendChild(tagRole); tagsEl.appendChild(tagStatus);
+
+      fillEmployeeReport(emp);
+    }
+
+    function fillEmployeeReport(emp) {
+      const badge = document.getElementById("reportBadge");
+      const reportSub = document.getElementById("reportSub");
+      const content = document.getElementById("reportContent");
+      const actions = document.getElementById("reportActions");
+      const timeline = document.getElementById("timelineText");
+      content.innerHTML = ""; actions.innerHTML = ""; timeline.textContent = "";
+
+      if (emp.hasReport) {
+        badge.className = "badge badge-green"; badge.textContent = "Report ready";
+        reportSub.textContent = "Summary of AI analysis across communication, confidence, and professionalism.";
+
+        const scoreGrid = document.createElement("div"); scoreGrid.className = "score-grid";
+        const overall = document.createElement("div"); overall.className = "score-card";
+        overall.innerHTML = `<div class="score-label">Overall fit score</div><div class="score-value">${emp.score ?? "—"}/100</div><div class="score-tagline">Based on role & competency matrix</div>`;
+        const comm = document.createElement("div"); comm.className = "score-card";
+        comm.innerHTML = `<div class="score-label">Communication</div><div class="score-value">—</div><div class="score-tagline">Clarity, fluency & structure</div>`;
+        const conf = document.createElement("div"); conf.className = "score-card";
+        conf.innerHTML = `<div class="score-label">Confidence</div><div class="score-value">—</div><div class="score-tagline">Eye contact, tone & stability</div>`;
+        scoreGrid.appendChild(overall); scoreGrid.appendChild(comm); scoreGrid.appendChild(conf);
+        content.appendChild(scoreGrid);
+
+        const summary = document.createElement("div");
+        summary.style.fontSize = "12px"; summary.style.opacity = "0.8"; summary.style.lineHeight = "1.6";
+        summary.textContent = "Use this report alongside recruiter judgment before final decisions.";
+        content.appendChild(summary);
+
+        const viewBtn = document.createElement("button");
+        viewBtn.className = "btn btn-filled btn-sm";
+        viewBtn.textContent = "Open full report (PDF)";
+        viewBtn.onclick = () => window.open(`${API_BASE}/api/reports/${encodeURIComponent(emp.id)}/latest`, "_blank");
+
+        const rerunBtn = document.createElement("button");
+        rerunBtn.className = "btn btn-outline btn-sm";
+        rerunBtn.textContent = "Re-run interview";
+        rerunBtn.onclick = () => { activeCandidateId = emp.id; navigate("#upload"); };
+
+        actions.appendChild(viewBtn); actions.appendChild(rerunBtn);
+        timeline.textContent = emp.lastInterview ? `Last AI interview completed on ${emp.lastInterview}.` : "Last AI interview date not available.";
+      } else {
+        badge.className = "badge badge-amber"; badge.textContent = "No report yet";
+        reportSub.textContent = "No AI interview has been recorded for this candidate.";
+        const info = document.createElement("div"); info.className = "no-report-box";
+        info.innerHTML = `<strong>No AI report generated.</strong><br />Start the first Evalyn interview to generate a full report.`;
+        content.appendChild(info);
+
+        const startBtn = document.createElement("button");
+        startBtn.className = "btn btn-filled btn-sm";
+        startBtn.textContent = "Start first AI interview";
+        startBtn.onclick = () => { activeCandidateId = emp.id; navigate("#upload"); };
+
+        const markBtn = document.createElement("button");
+        markBtn.className = "btn btn-outline btn-sm";
+        markBtn.textContent = "Mark as not proceeding";
+        markBtn.onclick = () => alert("In full product: mark candidate as not moving ahead.");
+
+        actions.appendChild(startBtn); actions.appendChild(markBtn);
+        timeline.textContent = "No previous AI interviews found for this candidate.";
+      }
+    }
+
+    /***************
+     * BOOTSTRAP
+     ***************/
+    window.addEventListener("DOMContentLoaded", async () => {
+      setupNavButtons();
+      setupUploadPage();
+      setupInterviewPage();
+      setupEmployeesPage();
+      if (!window.location.hash) navigate("#home"); else await handleRouteChange();
+      window.addEventListener("hashchange", handleRouteChange);
+    });
+  </script>
+</body>
+</html>
+
